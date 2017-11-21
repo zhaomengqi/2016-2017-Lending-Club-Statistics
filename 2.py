@@ -231,8 +231,7 @@ class featureSelection(luigi.Task):
     loginemail=luigi.Parameter()
     loginpassword=luigi.Parameter()
 
-    # login_email='agrawal.r@husky.neu.edu'
-    # login_password='ADS@12345'
+
 
     def requires(self):
         yield processData(loginemail=self.loginemail,loginpassword=self.loginpassword)
