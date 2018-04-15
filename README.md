@@ -1,5 +1,8 @@
 Lending Club Statistics from 2016 -2017
 
+
+
+
 Part 1: Data wrangling and exploratory data analysis https://www.lendingclub.com/info/download-data.action
 The goal is to download the data programmatically from the website and create one dataset for the entire database.
 
@@ -17,6 +20,9 @@ Exploratory Data analysis:
 • Write a Jupyter notebook using R/Python to graphically represent different summaries of data. Summarize your findings in this notebook.
 
 • Summarize your key insights about different user profiles, states, loan amounts etc.
+
+
+
 
 
 Part II: Building and evaluating models 
