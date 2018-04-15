@@ -1,74 +1,40 @@
 
-# Lending Club Statistics from 2016 -2017
+# Web-Spider-for-grabing-IBM-Database
 
 
+## Problem 1: Data wrangling Edgar data from text files 
+Part 1: Parse files
+https://datahub.io/dataset/edgar lists how to access data from Edgar. The goal of this exercise is to extract tables from 10Q filings using R/Python
+Given a company with CIK (company ID) XXX (omitting leading zeroes) and document accession number YYY (acc-no on search results), programmatically generate the url to get data (http://www.sec.gov/Archives/edgar/data/51143/000005114313000007/0000051143-13-000007- index.html for IBM for example). Parse the file to locate the link to the 10q file (https://www.sec.gov/Archives/edgar/data/51143/000005114313000007/ibm13q3_10q.htm for the above example). Parse this file to extract “all” tables in this filing and save them as csv files.
 
-## Part 1: Data wrangling and exploratory data analysis https://www.lendingclub.com/info/download-data.action
-The goal is to download the data programmatically from the website and create one dataset for the entire database.
+Part 2: Dockerize this pipeline
+Build a docker image that can automate this task for any CIK and document accession number which could be parameterized in a config file. We should be able to replace IBM’s CIK and document accession number with Google's to generate the url https://www.sec.gov/Archives/edgar/data/1288776/000128877615000046/0001288776-15-000046- index.htm and then parse this document to look for the 10Q filing https://www.sec.gov/Archives/edgar/data/1288776/000128877615000046/goog10-qq32015.htm and extract all tables from this filing. The program should log all activities, then zip the tables and upload the log file and the zip file to Amazon S3. Parameterize your cik, accession number and amazon keys so that anyone can put their cik, accession number and amazon keys and locations and reuse your code. (We will do a demo on working with Amazon S3 next week)
+Submission:
+Submit the github with the Docker file and source code so that we can rebuild the Docker images. Also register your Docker image on Dockerhub and provide links. Write a report detailing:
+• Your design and implementation for both the parts.
+• Review your outputs stored on Amazon S3 and discuss outputs. How do you handle exceptions
+when you don’t find the cik/accession number or if the amazon keys aren’t valid?
+  , the
+system, performs automated collection,
+validation, indexing, acceptance, and forwarding of submissions by companies and others who are required
+  by law to file forms with the
+U.S. Securities and Exchange Commission
+(the "SEC"). The database is freely
+  available to the public via the Internet (Web or FTP).
+              
+## Problem 2:
+Missing Data Analysis 
+You are asked to analyze the EDGAR Log File Data Set [https://www.sec.gov/data/edgar-log-file- data-set.html ]. The page lists the meta data for the datasets and you are expected to develop a pipeline which does the following. Given a year, your program (In R or Python) should get data for the first day of the month(programmatically generate the url http://www.sec.gov/dera/data/Public- EDGAR-log-file-data/2003/Qtr1/log20030101.zip for Jan 2003 for example ) for every month in the year and process the file for the following:
 
-Including:
-• Data download: How will you download all loan data and create one dataset? How can you timestamp the data so you know when the data was recorded?
+• Handle missing data
+• Compute summary metrics (Decide which ones)
+• Check for any observable anomalies
+• Your program should log all the operations (with time stamps) into a log file.
+• Compile all the data and summaries of the 12 files into one file
+• Upload this compiled data file and the log file you generated to your Amazon S3 bucket (Google
+on R/Python packages to use for this.
 
-• Missing data analysis: How will you handle missing data?
-
-• Feature engineering: What variables do you need to predict interest rates? Ensure users would be
-able to give you that information to help you predict rates
-
-• You need to create one more pipeline to do this for the “Declined Loan data”. Repeat above steps NOTE: NO HUMAN INTERVERSION SHOULD BE NEEDED AT ALL. YOUR LUIGI/AIRFLOW script SHOULD DO EVERYTHING.
-
-Exploratory Data analysis: 
-• Write a Jupyter notebook using R/Python to graphically represent different summaries of data. Summarize your findings in this notebook.
-
-• Summarize your key insights about different user profiles, states, loan amounts etc.
-
-
-
-
-
-## Part II: Building and evaluating models 
-The goal is to build a model to predict interest rates. Get leads from people with different profiles and you must decide if it will give loans or not and if it will give a loan, how much interest you would charge for those loans.
-
-Classification 
-Use the “Loan Data” and the “Declined Loan Data” datasets to build classification models that will generate a flag whether to give a loan or not.
-
-• Start with logistic regression using Jupyter and Python/R
-
-• Compute ROC curve and Confusion matrices for training and testing datasets and comment on the results.
-
-• Repeat this using Random Forest, Neural Network models algorithms.
-
-• Choose one model you will deploy and implement this model on the Microsoft azure machine learning studio and create a REST API
-
-• Should be able to a new record (You can define what features you will use) and the result will be a flag whether it would give a loan or not.
-
-Clustering 
-Once you have decided to give a loan, build models to decide what interest rate to give. Debating whether to create one model for all customer prospects or segment data into clusters and then build prediction models specific to each cluster. think of creating segments or clusters and build models one for each cluster. with 3 possibilities:
-
-1. Segment data into clusters manually using categorical or numerical features.
-
-2. Use a clustering algorithm (that can factor both numerical and categorical variables) and segment data into k clusters. then build prediction models for each cluster.
-
-3. No clusters; Just use data as is
-Once do the clustering use t-sne to visualize your clusters for some sample test data. See http://distill.pub/2016/misread-tsne/ for guidance on using t-sne Prediction 
-• Write a prediction script in a Jupyter notebook in R/Python that builds a Regression model for the interest rate using data from the 3 clustering methodologies worked
-
-o Tryvariableselectionandbuildthebestmodelforeachsegment/cluster
-
-o ComputeMAE,RMS,MAPEfortrainingandtestingdatasets
-
-o Repeat this using Random Forest, Neural Network models and KNN algorithms.
-
-o Choose the best model amongst the 4 types of algorithms.
-
-o Deploy the best algorithm/algorithms on Azure ML studio
-
-o You will have a bunch of Rest APIs you should be able to choose from based on the cluster the record belongs to Deployment 
-
-Design the following workflow:
-• Given a record, use a pre-trained clustering model to cluster the record to a segment.
-
-• Have 3 cluster assignments (1-manual, 2-based on your clustering algorithm, 3-default 1-cluster for all data)
-
-• For each cluster, there should be a RestAPI which is linked to a chosen prediction model. Look up that API and use it to predict the 3 distinct interest rates.
-
-• Select the highest interest rate and return it as your prescribed interest rate.
+The code should work for any year on the page. You should create a Docker image which runs the pipeline. Note: Don’t put sensitive information like amazon keys in your Docker files. Parameterize it so that anyone can put their specific keys and locations and reuse your code.
+Try your Docker image on AWS and run it for 2005 and share the locations for the AWS bucket with the processed data and log file in your report
+Submission:
+Submit the github with the Docker file and source code so that we can rebuild the Docker images. Also register your Docker image on Dockerhub and provide links.
