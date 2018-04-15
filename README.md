@@ -1,9 +1,9 @@
-#Lending Club Statistics from 2016 -2017
+
+# Lending Club Statistics from 2016 -2017
 
 
 
-
-##Part 1: Data wrangling and exploratory data analysis https://www.lendingclub.com/info/download-data.action
+## Part 1: Data wrangling and exploratory data analysis https://www.lendingclub.com/info/download-data.action
 The goal is to download the data programmatically from the website and create one dataset for the entire database.
 
 Including:
@@ -25,7 +25,7 @@ Exploratory Data analysis:
 
 
 
-##Part II: Building and evaluating models 
+## Part II: Building and evaluating models 
 The goal is to build a model to predict interest rates. Get leads from people with different profiles and you must decide if it will give loans or not and if it will give a loan, how much interest you would charge for those loans.
 
 Classification 
